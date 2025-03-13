@@ -67,6 +67,8 @@ def main() -> None:
     st.image("PragyanAI_Transperent_github.png")
     with st.sidebar:
         st.write("AI App created by @ PragyanAI - Education Purpose")
+        st.write("Contact Sateesh Ambesange for 5 Days Workshop:pragyan.ai.school@gmail.com")
+        st.write("TB - Story to Audio will be done Later")
     st.header("Image-to-Story Converter")
     uploaded_file: Any = st.file_uploader("Please choose a file to upload", type="jpg")
     if uploaded_file is not None:
