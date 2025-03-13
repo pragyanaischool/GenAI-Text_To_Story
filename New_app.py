@@ -82,28 +82,7 @@ def generate_speech_from_text(message: str) -> None:
         st.audio("generated_audio.wav")  # Play the audio in Streamlit
     except requests.exceptions.RequestException as e:
         st.error(f"Error generating speech: {e}")
-'''        
-# Convert Story to Speech
-def generate_speech_from_text(message: str) -> None:
-    #API_URL = "https://api-inference.huggingface.co/models/espnet/kan-bayashi_ljspeech_vits"
-    API_URL ="https://huggingface.co/mrfakename/SparkAudio-Spark-TTS-0.5B"
-    headers = {"Authorization": f"Bearer {HUGGINGFACE_API_TOKEN}"}
 
-    if not message.strip():
-        st.error("No text received for speech generation.")
-        return
-
-    try:
-        response = requests.post(API_URL, headers=headers, json={"inputs": message})
-        response.raise_for_status()
-        
-        with open("generated_audio.flac", "wb") as file:
-            file.write(response.content)
-        
-        st.success("Speech generation successful!")
-    except requests.exceptions.RequestException as e:
-        st.error(f"Error generating speech: {e}")
-'''
 # Streamlit UI
 def main():
     st.set_page_config(page_title="AI Image to Story Generator", page_icon="📖")
