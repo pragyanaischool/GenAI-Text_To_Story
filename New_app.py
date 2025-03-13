@@ -98,25 +98,7 @@ def generate_speech_from_text(message: Any) -> None:
         st.error(f"Error generating speech: {e}")
     except TypeError as e:
         st.error(f"Invalid input type for speech synthesis: {e}")
-'''        
-def generate_speech_from_text(message: str) -> None:
-    """Generates speech from text using Hugging Face's text-to-speech model."""
-    API_URL = "https://api-inference.huggingface.co/models/espnet/kan-bayashi_ljspeech_vits"
-    headers = {"Authorization": f"Bearer {HUGGINGFACE_API_TOKEN}"}
 
-    if not HUGGINGFACE_API_TOKEN:
-        st.error("Hugging Face API token is missing! Set it in the environment variables.")
-        return
-
-    try:
-        response = requests.post(API_URL, headers=headers, json={"inputs": message})
-        response.raise_for_status()  # Raise an error for bad responses
-        
-        with open("story_audio.mp3", "wb") as file:
-            file.write(response.content)
-    except requests.exceptions.RequestException as e:
-        st.error(f"Error generating speech: {e}")
-'''
 def run_async_task(coro):
     """Runs an async function safely in Streamlit."""
     loop = asyncio.new_event_loop()
