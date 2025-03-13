@@ -54,7 +54,35 @@ def generate_story_from_text(scenario: str) -> str:
     story_llm = LLMChain(llm=llm, prompt=prompt, verbose=True)
     
     return story_llm.predict(scenario=scenario)
+def generate_speech_from_text(message: str) -> None:
+    API_URL = "https://api-inference.huggingface.co/models/mrfakename/SparkAudio-Spark-TTS-0.5B"
+    headers = {"Authorization": f"Bearer {HUGGINGFACE_API_TOKEN}", "Content-Type": "application/json"}
 
+    if not message.strip():
+        st.error("No text received for speech generation.")
+        return
+
+    payload = {
+        "text": message,
+        "language": "en",  # Set language (modify as needed)
+        "speaker": "default",  # Change speaker if applicable
+        "speed": 1.0,  # Adjust speed (1.0 = normal, <1 = slower, >1 = faster)
+        "format": "wav"  # Ensure output format is correct
+    }
+
+    try:
+        response = requests.post(API_URL, headers=headers, json=payload)
+        response.raise_for_status()
+        
+        audio_data = response.content  # Get binary audio data
+        with open("generated_audio.wav", "wb") as file:
+            file.write(audio_data)  # Save audio file
+
+        st.success("Speech generation successful!")
+        st.audio("generated_audio.wav")  # Play the audio in Streamlit
+    except requests.exceptions.RequestException as e:
+        st.error(f"Error generating speech: {e}")
+'''        
 # Convert Story to Speech
 def generate_speech_from_text(message: str) -> None:
     #API_URL = "https://api-inference.huggingface.co/models/espnet/kan-bayashi_ljspeech_vits"
@@ -75,7 +103,7 @@ def generate_speech_from_text(message: str) -> None:
         st.success("Speech generation successful!")
     except requests.exceptions.RequestException as e:
         st.error(f"Error generating speech: {e}")
-
+'''
 # Streamlit UI
 def main():
     st.set_page_config(page_title="AI Image to Story Generator", page_icon="📖")
