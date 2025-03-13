@@ -58,7 +58,7 @@ def generate_story_from_text(scenario: str) -> str:
 # Convert Story to Speech
 def generate_speech_from_text(message: str) -> None:
     #API_URL = "https://api-inference.huggingface.co/models/espnet/kan-bayashi_ljspeech_vits"
-    API_URL ="https://api-inference.huggingface.co/models/SparkAudio/Spark-TTS-0.5B"
+    API_URL ="https://huggingface.co/mrfakename/SparkAudio-Spark-TTS-0.5B"
     headers = {"Authorization": f"Bearer {HUGGINGFACE_API_TOKEN}"}
 
     if not message.strip():
