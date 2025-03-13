@@ -13,8 +13,7 @@ from transformers import pipeline
 load_dotenv()
 HUGGINGFACE_API_TOKEN = os.getenv("HF_TOKEN")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-# Load the model and processor from Hugging Face
-device = "cuda" if torch.cuda.is_available() else "cpu"
+
 # CSS for UI Styling
 css_code = """
 <style>
