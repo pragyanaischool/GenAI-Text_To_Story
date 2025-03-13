@@ -77,7 +77,6 @@ def main() -> None:
         progress_bar(100)
         scenario: str = generate_text_from_image(uploaded_file.name)
         story: str = generate_story_from_text(scenario)
-        generate_speech_from_text(story)
         with st.expander("Generated Image scenario"):
             st.write(scenario)
         with st.expander("Generated short story"):
