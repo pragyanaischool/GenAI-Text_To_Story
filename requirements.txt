@@ -1,0 +1,8 @@
+transformers
+torch
+langchain
+groq
+langchain-groq
+python-dotenv
+requests
+streamlit
