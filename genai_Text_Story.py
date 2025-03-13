@@ -63,7 +63,7 @@ def generate_story_from_text(scenario: str) -> str:
 
 def generate_speech_from_text(message: str) -> Any:
     API_URL: str = "https://api-inference.huggingface.co/models/espnet/kan-bayashi_ljspeech_vits"
-    headers: dict[str, str] = {"Authorization": f"Bearer {HF_TOKEN}"}
+    headers: dict[str, str] = {"Authorization": f"Bearer {HUGGINGFACE_API_TOKEN}"}
     payloads: dict[str, str] = {"inputs": message}
     response: Any = requests.post(API_URL, headers=headers, json=payloads)
     with open("generated_audio.flac", "wb") as file:
