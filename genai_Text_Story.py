@@ -26,7 +26,7 @@ css_code: str = """
 """
 
 load_dotenv(find_dotenv())
-HUGGINGFACE_API_TOKEN = os.getenv("HUGGINGFACE_API_TOKEN")
+HUGGINGFACE_API_TOKEN = os.getenv("HF_TOKEN")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
 def progress_bar(amount_of_time: int) -> Any:
@@ -54,7 +54,7 @@ def generate_story_from_text(scenario: str) -> str:
     STORY:
     """
     prompt: PromptTemplate = PromptTemplate(template=prompt_template, input_variables=["scenario"])
-    llm: Any = ChatGroq(model_name="llama-2-13b-chat", temperature=0.9)  # Using Groq's Llama model
+    llm: Any = ChatGroq(model_name="llama-3.2-11b-vision-preview", temperature=0.9)  # Using Groq's Llama model
     story_llm: Any = LLMChain(llm=llm, prompt=prompt, verbose=True)
     generated_story: str = story_llm.predict(scenario=scenario)
     print(f"TEXT INPUT: {scenario}")
@@ -63,7 +63,7 @@ def generate_story_from_text(scenario: str) -> str:
 
 def generate_speech_from_text(message: str) -> Any:
     API_URL: str = "https://api-inference.huggingface.co/models/espnet/kan-bayashi_ljspeech_vits"
-    headers: dict[str, str] = {"Authorization": f"Bearer {HUGGINGFACE_API_TOKEN}"}
+    headers: dict[str, str] = {"Authorization": f"Bearer {HF_TOKEN}"}
     payloads: dict[str, str] = {"inputs": message}
     response: Any = requests.post(API_URL, headers=headers, json=payloads)
     with open("generated_audio.flac", "wb") as file:
