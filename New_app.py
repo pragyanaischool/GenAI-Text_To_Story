@@ -11,7 +11,8 @@ from transformers import pipeline
 
 import torch
 import torchaudio
-from transformers import AutoTokenizer, AutoModelForTTS
+from transformers import SpeechT5ForTextToSpeech, SpeechT5Processor
+
 # Load environment variables
 load_dotenv()
 HUGGINGFACE_API_TOKEN = os.getenv("HF_TOKEN")
@@ -58,14 +59,10 @@ def generate_story_from_text(scenario: str) -> str:
     
     return story_llm.predict(scenario=scenario)
 
-
-
-
-
 def generate_speech_from_text(message: str):
     model_name = "SparkAudio/Spark-TTS-0.5B"
-    processor = AutoProcessor.from_pretrained(model_name)
-    model = AutoModelForTTS.from_pretrained(model_name).to(device)
+    processor = SpeechT5Processor.from_pretrained(model_name)
+    model = SpeechT5ForTextToSpeech.from_pretrained(model_name)
     if not message.strip():
         st.error("No text received for speech generation.")
         return
