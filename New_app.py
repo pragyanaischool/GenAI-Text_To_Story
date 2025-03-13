@@ -13,7 +13,8 @@ from transformers import pipeline
 load_dotenv()
 HUGGINGFACE_API_TOKEN = os.getenv("HF_TOKEN")
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-
+# Load the model and processor from Hugging Face
+device = "cuda" if torch.cuda.is_available() else "cpu"
 # CSS for UI Styling
 css_code = """
 <style>
@@ -54,34 +55,31 @@ def generate_story_from_text(scenario: str) -> str:
     story_llm = LLMChain(llm=llm, prompt=prompt, verbose=True)
     
     return story_llm.predict(scenario=scenario)
-def generate_speech_from_text(message: str) -> None:
-    API_URL = "https://api-inference.huggingface.co/models/mrfakename/SparkAudio-Spark-TTS-0.5B"
-    headers = {"Authorization": f"Bearer {HUGGINGFACE_API_TOKEN}", "Content-Type": "application/json"}
 
+
+
+
+
+def generate_speech_from_text(message: str):
+    model_name = "SparkAudio/Spark-TTS-0.5B"
+    processor = AutoProcessor.from_pretrained(model_name)
+    model = AutoModelForTTS.from_pretrained(model_name).to(device)
     if not message.strip():
         st.error("No text received for speech generation.")
         return
+    
+    with torch.no_grad():
+        inputs = processor(message, return_tensors="pt")
+        inputs = {key: value.to(device) for key, value in inputs.items()}
+        output_waveform = model.generate(**inputs)
+    
+    # Convert tensor to audio
+    audio_path = "generated_audio.wav"
+    torchaudio.save(audio_path, output_waveform.cpu(), 22050)  # Save with a sample rate of 22.05kHz
+    
+    st.success("Speech generation successful!")
+    st.audio(audio_path)  # Play the generated audio in Streamlit
 
-    payload = {
-        "text": message,
-        "language": "en",  # Set language (modify as needed)
-        "speaker": "default",  # Change speaker if applicable
-        "speed": 1.0,  # Adjust speed (1.0 = normal, <1 = slower, >1 = faster)
-        "format": "wav"  # Ensure output format is correct
-    }
-
-    try:
-        response = requests.post(API_URL, headers=headers, json=payload)
-        response.raise_for_status()
-        
-        audio_data = response.content  # Get binary audio data
-        with open("generated_audio.wav", "wb") as file:
-            file.write(audio_data)  # Save audio file
-
-        st.success("Speech generation successful!")
-        st.audio("generated_audio.wav")  # Play the audio in Streamlit
-    except requests.exceptions.RequestException as e:
-        st.error(f"Error generating speech: {e}")
 
 # Streamlit UI
 def main():
