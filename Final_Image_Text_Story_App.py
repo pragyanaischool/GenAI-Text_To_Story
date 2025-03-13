@@ -48,7 +48,7 @@ def generate_text_from_image(url: str) -> str:
 def generate_story_from_text(scenario: str) -> str:
     prompt_template: str = f"""
     You are a talented storyteller who can create a story from a simple narrative.
-    Create a story using the following scenario; the story should be a maximum of 50 words long;
+    Create a story using the following scenario; the story should be a maximum of 500 words long, Fun and creative way to make story interesting;
     
     CONTEXT: {scenario}
     STORY:
