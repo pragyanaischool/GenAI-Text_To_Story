@@ -70,7 +70,35 @@ async def generate_story_from_text(scenario: str) -> str:
     except Exception as e:
         st.error(f"Error generating story: {e}")
         return ""
+def generate_speech_from_text(message: Any) -> None:
+    """Generates speech from text using Hugging Face's text-to-speech model."""
+    API_URL = "https://api-inference.huggingface.co/models/espnet/kan-bayashi_ljspeech_vits"
+    headers = {"Authorization": f"Bearer {HUGGINGFACE_API_TOKEN}"}
 
+    if not HUGGINGFACE_API_TOKEN:
+        st.error("Hugging Face API token is missing! Set it in the environment variables.")
+        return
+
+    if not message:
+        st.error("No text received for speech generation.")
+        return
+
+    # Ensure message is a valid string
+    message = str(message).strip()
+
+    try:
+        response = requests.post(API_URL, headers=headers, json={"inputs": message})
+        response.raise_for_status()  # Raise an error for bad responses
+        
+        with open("story_audio.mp3", "wb") as file:
+            file.write(response.content)
+
+        st.success("Speech generation successful!")
+    except requests.exceptions.RequestException as e:
+        st.error(f"Error generating speech: {e}")
+    except TypeError as e:
+        st.error(f"Invalid input type for speech synthesis: {e}")
+'''        
 def generate_speech_from_text(message: str) -> None:
     """Generates speech from text using Hugging Face's text-to-speech model."""
     API_URL = "https://api-inference.huggingface.co/models/espnet/kan-bayashi_ljspeech_vits"
@@ -84,11 +112,11 @@ def generate_speech_from_text(message: str) -> None:
         response = requests.post(API_URL, headers=headers, json={"inputs": message})
         response.raise_for_status()  # Raise an error for bad responses
         
-        with open("generated_audio.flac", "wb") as file:
+        with open("story_audio.mp3", "wb") as file:
             file.write(response.content)
     except requests.exceptions.RequestException as e:
         st.error(f"Error generating speech: {e}")
-
+'''
 def run_async_task(coro):
     """Runs an async function safely in Streamlit."""
     loop = asyncio.new_event_loop()
@@ -123,6 +151,7 @@ def main() -> None:
         
         if scenario:
             story = run_async_task(generate_story_from_text(scenario))
+            
             generate_speech_from_text(story)
             
             with st.expander("Generated Image Scenario"):
@@ -131,7 +160,7 @@ def main() -> None:
             with st.expander("Generated Short Story"):
                 st.write(story)
             
-            st.audio("generated_audio.flac")
+            st.audio("story_audio.mp3")
 
 if __name__ == "__main__":
     main()
