@@ -69,7 +69,7 @@ def generate_speech_from_text(message: str) -> Any:
 def main() -> None:
     st.set_page_config(page_title="IMAGE TO STORY CONVERTER", page_icon="🖼️")
     st.markdown(css_code, unsafe_allow_html=True)
-    st.image("PragyanAI_Transperent_github.png
+    st.image("PragyanAI_Transperent_github.png")
     with st.sidebar:
         st.write("AI App created by @ PragyanAI - Education Purpose")
     st.header("Image-to-Story Converter")
