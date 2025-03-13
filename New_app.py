@@ -9,6 +9,9 @@ from langchain_groq import ChatGroq
 from langchain.prompts import PromptTemplate
 from transformers import pipeline
 
+import torch
+import torchaudio
+from transformers import AutoTokenizer, AutoModelForTTS
 # Load environment variables
 load_dotenv()
 HUGGINGFACE_API_TOKEN = os.getenv("HF_TOKEN")
