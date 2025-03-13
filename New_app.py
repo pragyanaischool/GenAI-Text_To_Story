@@ -60,7 +60,7 @@ def generate_story_from_text(scenario: str) -> str:
     return story_llm.predict(scenario=scenario)
 
 def generate_speech_from_text(message: str):
-    model_name = "SparkAudio/Spark-TTS-0.5B"
+    model_name = "mrfakename/SparkAudio-Spark-TTS-0.5B"
     processor = SpeechT5Processor.from_pretrained(model_name)
     model = SpeechT5ForTextToSpeech.from_pretrained(model_name)
     if not message.strip():
