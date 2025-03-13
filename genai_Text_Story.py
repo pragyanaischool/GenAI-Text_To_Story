@@ -6,7 +6,10 @@ import requests
 import streamlit as st
 from dotenv import find_dotenv, load_dotenv
 from langchain.chains import LLMChain
-from langchain.chat_models import ChatGroq  # Using ChatGroq instead of ChatOpenAI
+#from langchain.chat_models import ChatGroq  # Using ChatGroq instead of ChatOpenAI
+from groq import Groq
+#from langchain.chat_models import ChatGroq
+from langchain_groq import ChatGroq
 from langchain.prompts import PromptTemplate
 from transformers import pipeline
 
